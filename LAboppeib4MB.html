@@ -436,7 +436,6 @@
     </div>
     
     <div class="grid">
-        <!-- ສ່ວນເພີ່ມຂໍ້ມູນ -->
         <div class="form-section" id="sectionAdd">
             <h3><i class="fas fa-plus-circle"></i> ເພີ່ມຂໍ້ມູນໃໝ່</h3>
             <form id="landForm" onsubmit="addNewLand(event)">
@@ -468,7 +467,7 @@
                     <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:space-between;align-items:center;font-size:clamp(10px,1.5vw,13px);">
                         <span><i class="fas fa-sync-alt"></i> <strong>ອັດຕາແລກປ່ຽນ</strong></span>
                         <span class="rate">1 USD = <strong id="rateUSDToKIP">25,000</strong> ₭</span>
-                        <span class="rate">1 USD = <strong id="rateUSDToTHB">34.5</strong> ฿</span>
+                        <span class="rate">1 USD = <strong id="rateUSDToTHB">34</strong> ฿</span>
                     </div>
                     <div style="margin-top:6px;font-size:clamp(10px,1.5vw,13px);color:#666;">
                         <i class="fas fa-exchange-alt"></i> ລາຄາໃນສະກຸນອື່ນ: 
@@ -499,7 +498,6 @@
                     </select>
                 </div>
                 
-                <!-- ພິກັດ -->
                 <div class="form-group">
                     <label><i class="fas fa-map-marker-alt"></i> ພິກັດ <span style="color:red;">*</span> (ພີມເອງ ຫຼື ຄລິກແຜນທີ່)</label>
                     <div class="flex gap-5">
@@ -508,7 +506,6 @@
                     </div>
                 </div>
                 
-                <!-- ອັບໂຫຼດຫຼາຍຮູບ -->
                 <div class="form-group">
                     <label><i class="fas fa-images"></i> ອັບໂຫຼດຮູບ (ສູງສຸດ 5 ຮູບ)</label>
                     <input type="file" id="newImages" accept="image/*" multiple onchange="previewMultipleImages(event)">
@@ -522,12 +519,10 @@
                 <div class="btn-group">
                     <button type="submit" class="btn btn-success" id="submitBtn"><i class="fas fa-save"></i> ບັນທຶກ</button>
                     <button type="button" class="btn btn-warning" onclick="syncToSupabase()"><i class="fas fa-sync-alt"></i> Sync</button>
-                    <button type="button" class="btn btn-secondary" onclick="testConnection()"><i class="fas fa-plug"></i> ທົດສອບ</button>
                 </div>
             </form>
         </div>
 
-        <!-- ສ່ວນຄົ້ນຫາ ແລະ ຜົນລັບ -->
         <div>
             <div class="form-section" id="sectionSearch">
                 <h3><i class="fas fa-search"></i> ຄົ້ນຫາ</h3>
@@ -568,7 +563,6 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" onclick="searchNearest()"><i class="fas fa-search-location"></i> ຄົ້ນຫາ</button>
                     <button type="button" class="btn btn-warning" onclick="exportCSV()"><i class="fas fa-file-export"></i> CSV</button>
-                    <button type="button" class="btn btn-info" onclick="loadFromSupabase()"><i class="fas fa-cloud-download-alt"></i> ໂຫຼດ</button>
                 </div>
             </div>
 
@@ -585,7 +579,6 @@
             </div>
         </div>
 
-        <!-- ສ່ວນແຜນທີ່ -->
         <div>
             <div id="map"></div>
             <div class="flex flex-wrap gap-5 mt-10" style="justify-content:center;">
@@ -637,10 +630,10 @@
 
 <script>
 // =============================================
-// 1. SUPABASE CONFIG (ອັບເດດ URL ໃຫ້ກົງກັບ Project ປັດຈຸບັນຂອງທ່ານ)
+// 1. SUPABASE CONFIG
 // =============================================
-const SUPABASE_URL = 'https://tjspuvdrnrmpdxytvsla.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqc3B1dmRybnJtcGR4eXR2c2xhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2OTM4NDIsImV4cCI6MjEwMjI2OTg0Mn0.t4S4mTr-cAE1vnioh_Dy3mWAI_33RdCwAI8Kqcdhffw';
+const SUPABASE_URL = 'https://gwjpjkdcncmlwdhwihbg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3anBqa2RjbmNtbHdkaHdpaGJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2OTM4NDIsImV4cCI6MjEwMjI2OTg0Mn0.t4S4mTr-cAE1vnioh_Dy3mWAI_33RdCwAI8Kqcdhffw';
 const TABLE_NAME = 'marketplace_listings';
 
 // =============================================
@@ -655,9 +648,9 @@ const CURRENCY_NAMES = { USD: 'ໂດລາ', THB: 'ບາດ', KIP: 'ກີບ'
 // =============================================
 let landDatabase = [];
 let editingId = null;
-let isSupabaseConnected = false;
-let supabase = null;
 let uploadedImages = [];
+let supabase = null;
+let isSupabaseConnected = false;
 let isSyncing = false;
 
 // =============================================
@@ -699,7 +692,7 @@ function previewMultipleImages(event) {
     uploadedImages = [];
     
     if (files.length > 5) {
-        showToast('ອັບໄດ້ສູງສຸດ 5 ຮູບເທົ່ານັ້ນ!', 'warning');
+        showToast('ອັບໄດ້ສູງສຸດ 5 ຮູບ!', 'warning');
         event.target.value = '';
         return;
     }
@@ -719,8 +712,8 @@ function previewMultipleImages(event) {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-btn';
             deleteBtn.innerHTML = '✕';
-            deleteBtn.onclick = function(ev) {
-                ev.stopPropagation();
+            deleteBtn.onclick = function(e) {
+                e.stopPropagation();
                 const idx = uploadedImages.indexOf(e.target.result);
                 if (idx > -1) {
                     uploadedImages.splice(idx, 1);
@@ -750,87 +743,46 @@ function showImageFull(src) {
 }
 
 // =============================================
-// 7. TEST CONNECTION
-// =============================================
-async function testConnection() {
-    showToast('⏳ ກຳລັງທົດສອບການເຊື່ອມຕໍ່...', 'info');
-    
-    try {
-        const testClient = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: { persistSession: false }
-        });
-        
-        const { error } = await testClient.from(TABLE_NAME).select('count', { count: 'exact', head: true });
-        
-        if (error) {
-            console.error('❌ Test failed:', error);
-            showToast('❌ ການເຊື່ອມຕໍ່ລົ້ມເຫຼວ: ' + error.message, 'error');
-            return false;
-        }
-        
-        showToast('✅ ການເຊື່ອມຕໍ່ສຳເລັດ!', 'success');
-        return true;
-        
-    } catch (e) {
-        console.error('❌ Test exception:', e);
-        showToast('❌ ການເຊື່ອມຕໍ່ລົ້ມເຫຼວ: ' + e.message, 'error');
-        return false;
-    }
-}
-
-// =============================================
-// 8. SUPABASE INIT
+// 7. SUPABASE INIT
 // =============================================
 async function initSupabase() {
     try {
         supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                persistSession: false,
-                autoRefreshToken: false,
-                detectSessionInUrl: false
-            }
+            auth: { persistSession: false }
         });
         
-        const { error } = await supabase.from(TABLE_NAME).select('count', { count: 'exact', head: true });
+        // ທົດສອບການເຊື່ອມຕໍ່
+        const { data, error } = await supabase.from(TABLE_NAME).select('count', { count: 'exact', head: true });
         
-        if (error) throw error;
+        if (error) {
+            console.warn('Supabase connection error:', error);
+            isSupabaseConnected = false;
+            document.getElementById('connectionStatus').className = 'status-badge offline';
+            document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອຟໄລນ໌';
+            showToast('⚠️ ໃຊ້ LocalStorage ເທົ່ານັ້ນ', 'warning');
+            return;
+        }
         
         isSupabaseConnected = true;
         document.getElementById('connectionStatus').className = 'status-badge online';
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';
         showToast('✅ ເຊື່ອມຕໍ່ Cloud ສຳເລັດ!', 'success');
         
+        // ໂຫຼດຂໍ້ມູນ
         await loadFromSupabase();
-        setupRealtimeSubscription();
         
     } catch (e) {
-        console.error('❌ Supabase init error:', e);
+        console.error('Supabase init error:', e);
         isSupabaseConnected = false;
         document.getElementById('connectionStatus').className = 'status-badge offline';
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອຟໄລນ໌';
-        
-        let errorMsg = e.message || 'ບໍ່ຮູ້ສາເຫດ';
-        if (errorMsg.includes('relation') && errorMsg.includes('does not exist')) {
-            showToast('⚠️ ຕາຕະລາງ marketplace_listings ຍັງບໍ່ມີໃນ Supabase!', 'error');
-        } else {
-            showToast('⚠️ ບໍ່ສາມາດເຊື່ອມຕໍ່ Cloud ໄດ້! ໃຊ້ LocalStorage ແທນ', 'warning');
-        }
+        showToast('⚠️ ບໍ່ສາມາດເຊື່ອມຕໍ່ Cloud ໄດ້! ໃຊ້ LocalStorage ແທນ', 'warning');
         loadFromLocalStorage();
     }
 }
 
-function setupRealtimeSubscription() {
-    if (!isSupabaseConnected) return;
-    supabase.channel('marketplace-changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: TABLE_NAME }, () => {
-            loadFromSupabase();
-            showToast('🔄 ມີການປ່ຽນແປງຂໍ້ມູນ!', 'info');
-        })
-        .subscribe();
-}
-
 // =============================================
-// 9. DATA LOADING
+// 8. DATA LOADING
 // =============================================
 async function loadFromSupabase() {
     if (!isSupabaseConnected) { loadFromLocalStorage(); return; }
@@ -882,7 +834,7 @@ function updateUI() {
 }
 
 // =============================================
-// 10. CRUD OPERATIONS
+// 9. CRUD OPERATIONS
 // =============================================
 async function addNewLand(event) {
     event.preventDefault();
@@ -891,7 +843,7 @@ async function addNewLand(event) {
     const lng = parseFloat(document.getElementById('newLng').value);
     
     if (isNaN(lat) || isNaN(lng)) {
-        showToast('❌ ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ! (ຄລິກແຜນທີ່ ຫຼື ພີມເອງ)', 'error');
+        showToast('❌ ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ!', 'error');
         return;
     }
     
@@ -938,22 +890,21 @@ async function addNewLand(event) {
             }
             editingId = null;
             document.querySelector('#landForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> ບັນທຶກ';
-            showToast('📝 ອັບເດດຂໍ້ມູນໃນ Local ສຳເລັດ!', 'success');
+            showToast('📝 ອັບເດດສຳເລັດ!', 'success');
         } else {
             landDatabase.push(newItem);
-            showToast('📝 ບັນທຶກຂໍ້ມູນໃນ Local ສຳເລັດ!', 'success');
+            showToast('📝 ບັນທຶກສຳເລັດ!', 'success');
         }
         
         saveToLocalStorage();
         resetForm();
         updateUI();
         
+        // Sync ກັບ Cloud
         if (isSupabaseConnected) {
-            showToast('☁️ ກຳລັງບັນທຶກໃສ່ Cloud...', 'info');
-            await syncToSupabase();
-        } else {
-            showToast('⚠️ ບໍ່ເຊື່ອມຕໍ່ Cloud! ຂໍ້ມູນຖືກບັນທຶກໃນ Local ເທົ່ານັ້ນ', 'warning');
+            await syncSingleItem(newItem.id);
         }
+        
     } catch (error) {
         console.error('Add land error:', error);
         showToast('❌ ບັນທຶກຂໍ້ມູນລົ້ມເຫຼວ!', 'error');
@@ -963,13 +914,72 @@ async function addNewLand(event) {
     }
 }
 
+async function syncSingleItem(id) {
+    const item = landDatabase.find(d => d.id === id);
+    if (!item || !isSupabaseConnected) return;
+    
+    try {
+        // ກວດສອບວ່າມີຂໍ້ມູນແລ້ວບໍ
+        const { data: existing } = await supabase
+            .from(TABLE_NAME)
+            .select('id')
+            .eq('id', id)
+            .maybeSingle();
+        
+        const dataToSave = {
+            title: item.title,
+            phone: item.phone,
+            price: item.price,
+            currency: item.currency,
+            area: item.area,
+            width: item.width,
+            address: item.address,
+            deed: item.deed,
+            lat: item.lat,
+            lng: item.lng,
+            date: item.date,
+            images: item.images || []
+        };
+        
+        let result;
+        if (existing) {
+            // ອັບເດດ
+            result = await supabase
+                .from(TABLE_NAME)
+                .update(dataToSave)
+                .eq('id', id);
+        } else {
+            // ເພີ່ມໃໝ່
+            result = await supabase
+                .from(TABLE_NAME)
+                .insert([{ id: id, ...dataToSave }]);
+        }
+        
+        if (result.error) {
+            console.error('Sync error:', result.error);
+            showToast(`❌ Sync ${item.title} ລົ້ມເຫຼວ!`, 'error');
+        } else {
+            item.synced = true;
+            saveToLocalStorage();
+            updatePendingSync();
+            showToast(`✅ Sync ${item.title} ສຳເລັດ!`, 'success');
+        }
+    } catch (e) {
+        console.error('Sync error:', e);
+        showToast(`❌ Sync ${item.title} ລົ້ມເຫຼວ!`, 'error');
+    }
+}
+
 async function syncToSupabase() {
     if (!isSupabaseConnected) {
-        showToast('❌ ບໍ່ສາມາດ Sync ໄດ້! ກະລຸນາເຊື່ອມຕໍ່ Supabase ກ่อน', 'error');
+        showToast('❌ ບໍ່ສາມາດ Sync ໄດ້! ກະລຸນາເຊື່ອມຕໍ່ Cloud ກ່ອນ', 'error');
         return;
     }
     
-    if (isSyncing) return;
+    if (isSyncing) {
+        showToast('⏳ ກຳລັງ Sync ຢູ່...', 'info');
+        return;
+    }
     
     const unsynced = landDatabase.filter(item => !item.synced);
     if (unsynced.length === 0) {
@@ -980,14 +990,18 @@ async function syncToSupabase() {
     isSyncing = true;
     document.getElementById('connectionStatus').className = 'status-badge syncing';
     document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-spinner fa-spin"></i> ກຳລັງ Sync...';
+    showToast(`⏳ ກຳລັງ Sync ${unsynced.length} ລາຍການ...`, 'info');
     
     let success = 0;
-    let errors = [];
-    
     for (const item of unsynced) {
         try {
+            const { data: existing } = await supabase
+                .from(TABLE_NAME)
+                .select('id')
+                .eq('id', item.id)
+                .maybeSingle();
+            
             const dataToSave = {
-                id: item.id,
                 title: item.title,
                 phone: item.phone,
                 price: item.price,
@@ -1002,60 +1016,58 @@ async function syncToSupabase() {
                 images: item.images || []
             };
             
-            const { error: upsertError } = await supabase.from(TABLE_NAME).upsert(dataToSave);
-            
-            if (upsertError) {
-                errors.push({ id: item.id, error: upsertError.message });
+            let result;
+            if (existing) {
+                result = await supabase.from(TABLE_NAME).update(dataToSave).eq('id', item.id);
             } else {
-                const dbItem = landDatabase.find(d => d.id === item.id);
-                if (dbItem) dbItem.synced = true;
+                result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...dataToSave }]);
+            }
+            
+            if (!result.error) {
+                item.synced = true;
                 success++;
             }
         } catch (e) {
-            errors.push({ id: item.id, error: e.message });
+            console.error('Sync error:', e);
         }
     }
     
     saveToLocalStorage();
     updatePendingSync();
-    
-    if (errors.length === 0) {
-        showToast(`✅ Sync ${success} ລາຍການສຳເລັດ!`, 'success');
-    } else {
-        showToast(`⚠️ Sync ສຳເລັດ ${success}, ຜິດພາດ ${errors.length}`, 'warning');
-    }
-    
     document.getElementById('connectionStatus').className = 'status-badge online';
     document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';
     isSyncing = false;
     
-    if (success > 0) await loadFromSupabase();
+    showToast(`✅ Sync ${success}/${unsynced.length} ສຳເລັດ!`, 'success');
+    await loadFromSupabase();
 }
 
-async function deleteLand(id) {
+function deleteLand(id) {
     if (!confirm('ລຶບຂໍ້ມູນນີ້ແທ້ບໍ?')) return;
     landDatabase = landDatabase.filter(item => item.id !== id);
     saveToLocalStorage();
     if (isSupabaseConnected) {
-        try { await supabase.from(TABLE_NAME).delete().eq('id', id); } catch(e) {}
+        supabase.from(TABLE_NAME).delete().eq('id', id).then(() => {
+            showToast('🗑️ ລຶບສຳເລັດ!', 'success');
+        });
     }
     updateUI();
-    showToast('🗑️ ລຶບສຳເລັດ!', 'success');
 }
 
-async function clearAllData() {
+function clearAllData() {
     if (!confirm('ລຶບທັງໝົດແທ້ບໍ? ບໍ່ສາມາດກູ້ຄືນໄດ້!')) return;
     landDatabase = [];
     saveToLocalStorage();
     if (isSupabaseConnected) {
-        try { await supabase.from(TABLE_NAME).delete().neq('id', 0); } catch(e) {}
+        supabase.from(TABLE_NAME).delete().neq('id', 0).then(() => {
+            showToast('🗑️ ລຶບທັງໝົດແລ້ວ!', 'warning');
+        });
     }
     updateUI();
-    showToast('🗑️ ລຶບທັງໝົດແລ້ວ!', 'warning');
 }
 
 // =============================================
-// 11. SEARCH
+// 10. SEARCH
 // =============================================
 function searchNearest() {
     const targetLat = parseFloat(document.getElementById('targetLat').value);
@@ -1156,7 +1168,7 @@ function searchNearest() {
 }
 
 // =============================================
-// 12. HELPERS
+// 11. HELPERS
 // =============================================
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -1222,8 +1234,8 @@ function editLand(id) {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-btn';
             deleteBtn.innerHTML = '✕';
-            deleteBtn.onclick = function(ev) {
-                ev.stopPropagation();
+            deleteBtn.onclick = function(e) {
+                e.stopPropagation();
                 const idx = uploadedImages.indexOf(img);
                 if (idx > -1) {
                     uploadedImages.splice(idx, 1);
@@ -1320,43 +1332,6 @@ function showDetail(id) {
 
 function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
 
-async function syncSingleItem(id) {
-    const item = landDatabase.find(d => d.id === id);
-    if (!item || !isSupabaseConnected) { showToast('❌ ບໍ່ສາມາດ Sync ໄດ້!', 'error'); return; }
-    if (isSyncing) return;
-    
-    isSyncing = true;
-    try {
-        const dataToSave = {
-            id: item.id,
-            title: item.title,
-            phone: item.phone,
-            price: item.price,
-            currency: item.currency,
-            area: item.area,
-            width: item.width,
-            address: item.address,
-            deed: item.deed,
-            lat: item.lat,
-            lng: item.lng,
-            date: item.date,
-            images: item.images || []
-        };
-        
-        const { error: upsertError } = await supabase.from(TABLE_NAME).upsert(dataToSave);
-        if (!upsertError) {
-            item.synced = true;
-            saveToLocalStorage();
-            updatePendingSync();
-            searchNearest();
-            showToast('✅ Sync ສຳເລັດ!', 'success');
-        } else {
-            showToast('❌ Sync ລົ້ມເຫຼວ: ' + upsertError.message, 'error');
-        }
-    } catch(e) { showToast('❌ Sync ລົ້ມເຫຼວ!', 'error'); }
-    isSyncing = false;
-}
-
 function showAllMarkers() {
     markersLayer.clearLayers();
     landDatabase.forEach(item => {
@@ -1395,11 +1370,11 @@ function showToast(message, type = 'success') {
     if (type === 'info') toast.classList.add('info');
     toast.classList.add('show');
     clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);
+    toast._timeout = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
 // =============================================
-// 13. MAP
+// 12. MAP
 // =============================================
 const map = L.map('map', { 
     zoomControl: true,
@@ -1425,26 +1400,29 @@ map.on('click', function(e) {
     if (tempMarker) map.removeLayer(tempMarker);
     tempMarker = L.marker([lat, lng], { draggable: true }).addTo(map)
         .bindPopup("📍 ຈຸດທີ່ເລືອກ").openPopup();
-    showToast('📍 ເລືອກພິກັດແລ້ວ! (ສາມາດພີມແກ້ໄຂໄດ້)', 'info');
+    showToast('📍 ເລືອກພິກັດແລ້ວ!', 'info');
 });
 
 // =============================================
-// 14. INIT
+// 13. INIT
 // =============================================
 document.getElementById('newDate').valueAsDate = new Date();
 document.getElementById('rateUSDToKIP').textContent = CURRENCY_RATES.KIP.toLocaleString();
 document.getElementById('rateUSDToTHB').textContent = CURRENCY_RATES.THB;
 updateRangeDisplay();
+loadFromLocalStorage();
+initSupabase();
 
-setTimeout(() => {
-    initSupabase();
-}, 500);
-
+// Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
     if (e.ctrlKey && e.key === 'Enter') document.getElementById('landForm').dispatchEvent(new Event('submit'));
     if (e.ctrlKey && e.key === 's') { e.preventDefault(); syncToSupabase(); }
 });
+
+console.log('🏠 ລະບົບພ້ອມໃຊ້ງານແລ້ວ!');
+console.log('📊 ມີຂໍ້ມູນ', landDatabase.length, 'ລາຍການ');
+console.log('☁️ Supabase:', isSupabaseConnected ? 'ເຊື່ອມຕໍ່ແລ້ວ' : 'ບໍ່ເຊື່ອມຕໍ່');
 </script>
 </body>
 </html>
