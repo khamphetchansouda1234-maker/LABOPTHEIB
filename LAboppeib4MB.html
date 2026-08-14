@@ -60,6 +60,9 @@
         }  
         .status-badge.online { background: #28a745; color: white; }  
         .status-badge.offline { background: #dc3545; color: white; }  
+        .status-badge.syncing { background: #ffc107; color: #333; animation: pulse 1s infinite; }  
+          
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }  
           
         .stats-bar {   
             display: grid;   
@@ -396,6 +399,17 @@
             .container { padding: 12px; border-radius: 12px; }  
         }  
           
+        .loading-spinner {  
+            display: inline-block;  
+            width: 20px;  
+            height: 20px;  
+            border: 3px solid rgba(255,255,255,0.3);  
+            border-radius: 50%;  
+            border-top-color: #fff;  
+            animation: spin 0.8s ease-in-out infinite;  
+        }  
+        @keyframes spin { to { transform: rotate(360deg); } }  
+          
         @media print { .btn, .form-section, .stats-bar, .mobile-bottom-nav { display: none; } }  
     </style>  
 </head>  
@@ -427,7 +441,7 @@
             <h3><i class="fas fa-plus-circle"></i> ເພີ່ມຂໍ້ມູນໃໝ່</h3>  
             <form id="landForm" onsubmit="addNewLand(event)">  
                 <div class="form-group">  
-                    <label><i class="fas fa-tag"></i> ຊື່ຫົວຂໍ້</label>  
+                    <label><i class="fas fa-tag"></i> ຊື່ຫົວຂໍ້ <span style="color:red;">*</span></label>  
                     <input type="text" id="newTitle" placeholder="ຊື່ທີ່ດິນ" required>  
                 </div>  
                 <div class="form-group">  
@@ -437,7 +451,7 @@
                   
                 <div class="flex flex-wrap gap-5">  
                     <div class="form-group" style="flex:2;min-width:100px;">  
-                        <label><i class="fas fa-money-bill-wave"></i> ລາຄາ</label>  
+                        <label><i class="fas fa-money-bill-wave"></i> ລາຄາ <span style="color:red;">*</span></label>  
                         <input type="number" id="newPrice" placeholder="ລາຄາ" required step="0.01" min="0" inputmode="decimal">  
                     </div>  
                     <div class="form-group" style="flex:1;min-width:80px;">  
@@ -473,7 +487,7 @@
                     </div>  
                 </div>  
                 <div class="form-group">  
-                    <label><i class="fas fa-map-pin"></i> ທີ່ຢູ່</label>  
+                    <label><i class="fas fa-map-pin"></i> ທີ່ຢູ່ <span style="color:red;">*</span></label>  
                     <input type="text" id="newAddress" placeholder="ບ້ານ, ເມືອງ" required>  
                 </div>  
                 <div class="form-group">  
@@ -485,16 +499,16 @@
                     </select>  
                 </div>  
                   
-                <!-- ພິກັດ - ພີມໄດ້ ແລະ ຄລິກແຜນທີ່ໄດ້ -->  
+                <!-- ພິກັດ -->  
                 <div class="form-group">  
-                    <label><i class="fas fa-map-marker-alt"></i> ພິກັດ (ພີມເອງ ຫຼື ຄລິກແຜນທີ່)</label>  
+                    <label><i class="fas fa-map-marker-alt"></i> ພິກັດ <span style="color:red;">*</span> (ພີມເອງ ຫຼື ຄລິກແຜນທີ່)</label>  
                     <div class="flex gap-5">  
                         <input type="text" id="newLat" placeholder="Latitude" required style="flex:1;font-size:12px;" inputmode="decimal">  
                         <input type="text" id="newLng" placeholder="Longitude" required style="flex:1;font-size:12px;" inputmode="decimal">  
                     </div>  
                 </div>  
                   
-                <!-- ອັບໂຫຼດຫຼາຍຮູບ (ສູງສຸດ 5 ຮູບ) -->  
+                <!-- ອັບໂຫຼດຫຼາຍຮູບ -->  
                 <div class="form-group">  
                     <label><i class="fas fa-images"></i> ອັບໂຫຼດຮູບ (ສູງສຸດ 5 ຮູບ)</label>  
                     <input type="file" id="newImages" accept="image/*" multiple onchange="previewMultipleImages(event)">  
@@ -506,7 +520,7 @@
                     <input type="date" id="newDate" required>  
                 </div>  
                 <div class="btn-group">  
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> ບັນທຶກ</button>  
+                    <button type="submit" class="btn btn-success" id="submitBtn"><i class="fas fa-save"></i> ບັນທຶກ</button>  
                     <button type="button" class="btn btn-warning" onclick="syncToSupabase()"><i class="fas fa-sync-alt"></i> Sync</button>  
                 </div>  
             </form>  
@@ -643,6 +657,7 @@ let editingId = null;
 let isSupabaseConnected = false;  
 let supabase = null;  
 let uploadedImages = [];  
+let isSyncing = false;  
   
 // =============================================  
 // 4. MOBILE FUNCTIONS  
@@ -708,15 +723,7 @@ function previewMultipleImages(event) {
                 const idx = uploadedImages.indexOf(e.target.result);  
                 if (idx > -1) {  
                     uploadedImages.splice(idx, 1);  
-                    previewMultipleImages({ target: { files: [] } });  
-                    // ອັບເດດໄຟລ໌ທີ່ເຫຼືອ  
-                    const dt = new DataTransfer();  
-                    const remaining = Array.from(files).filter((_, fi) => fi !== i);  
-                    remaining.forEach(f => dt.items.add(f));  
-                    document.getElementById('newImages').files = dt.files;  
-                    if (remaining.length > 0) {  
-                        previewMultipleImages({ target: { files: dt.files } });  
-                    }  
+                    container.removeChild(wrapper);  
                 }  
             };  
               
@@ -747,20 +754,30 @@ function showImageFull(src) {
 async function initSupabase() {  
     try {  
         supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);  
+          
+        // ທົດສອບການເຊື່ອມຕໍ່  
         const { error } = await supabase.from(TABLE_NAME).select('count', { count: 'exact', head: true });  
-        if (error) throw error;  
+          
+        if (error) {  
+            console.error('Supabase connection error:', error);  
+            throw error;  
+        }  
+          
         isSupabaseConnected = true;  
         document.getElementById('connectionStatus').className = 'status-badge online';  
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';  
-        showToast('ເຊື່ອມຕໍ່ Cloud ສຳເລັດ!', 'success');  
+        showToast('✅ ເຊື່ອມຕໍ່ Cloud ສຳເລັດ!', 'success');  
+          
+        // ໂຫຼດຂໍ້ມູນ  
         await loadFromSupabase();  
         setupRealtimeSubscription();  
+          
     } catch (e) {  
-        console.warn('Supabase connection failed:', e);  
+        console.error('Supabase init error:', e);  
         isSupabaseConnected = false;  
         document.getElementById('connectionStatus').className = 'status-badge offline';  
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອຟໄລນ໌';  
-        showToast('ໃຊ້ LocalStorage ແທນ', 'warning');  
+        showToast('⚠️ ບໍ່ສາມາດເຊື່ອມຕໍ່ Cloud ໄດ້! ໃຊ້ LocalStorage ແທນ', 'warning');  
         loadFromLocalStorage();  
     }  
 }  
@@ -770,7 +787,7 @@ function setupRealtimeSubscription() {
     supabase.channel('lands-changes')  
         .on('postgres_changes', { event: '*', schema: 'public', table: TABLE_NAME }, () => {  
             loadFromSupabase();  
-            showToast('ມີການປ່ຽນແປງຂໍ້ມູນ!', 'info');  
+            showToast('🔄 ມີການປ່ຽນແປງຂໍ້ມູນ!', 'info');  
         })  
         .subscribe();  
 }  
@@ -786,6 +803,7 @@ async function loadFromSupabase() {
         landDatabase = data || [];  
         saveToLocalStorage();  
         updateUI();  
+        showToast(`📥 ໂຫຼດຂໍ້ມູນ ${landDatabase.length} ລາຍການຈາກ Cloud`, 'success');  
     } catch (e) {  
         console.error('Load error:', e);  
         loadFromLocalStorage();  
@@ -827,34 +845,43 @@ function updateUI() {
 }  
   
 // =============================================  
-// 9. CRUD  
+// 9. CRUD OPERATIONS  
 // =============================================  
 async function addNewLand(event) {  
     event.preventDefault();  
       
+    // ກວດສອບຂໍ້ມູນ  
     const lat = parseFloat(document.getElementById('newLat').value);  
     const lng = parseFloat(document.getElementById('newLng').value);  
       
     if (isNaN(lat) || isNaN(lng)) {  
-        showToast('ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ! (ຄລິກແຜນທີ່ ຫຼື ພີມເອງ)', 'error');  
+        showToast('❌ ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ! (ຄລິກແຜນທີ່ ຫຼື ພີມເອງ)', 'error');  
         return;  
     }  
       
     const price = parseFloat(document.getElementById('newPrice').value);  
     if (isNaN(price) || price <= 0) {  
-        showToast('ກະລຸນາປ້ອນລາຄາ!', 'error');  
+        showToast('❌ ກະລຸນາປ້ອນລາຄາ!', 'error');  
         return;  
     }  
       
+    const title = document.getElementById('newTitle').value.trim();  
+    const address = document.getElementById('newAddress').value.trim();  
+    if (!title || !address) {  
+        showToast('❌ ກະລຸນາປ້ອນຊື່ ແລະ ທີ່ຢູ່!', 'error');  
+        return;  
+    }  
+      
+    // ກຽມຂໍ້ມູນ  
     const newItem = {  
         id: editingId || Date.now(),  
-        title: document.getElementById('newTitle').value,  
+        title: title,  
         phone: document.getElementById('newPhone').value || '-',  
         price: price,  
         currency: document.getElementById('newCurrency').value,  
         area: document.getElementById('newArea').value || '0 ຕມ',  
         width: document.getElementById('newWidth').value || '0 ມ',  
-        address: document.getElementById('newAddress').value,  
+        address: address,  
         deed: document.getElementById('newDeed').value,  
         lat: lat,  
         lng: lng,  
@@ -863,58 +890,154 @@ async function addNewLand(event) {
         synced: false  
     };  
       
-    if (editingId) {  
-        const index = landDatabase.findIndex(item => item.id === editingId);  
-        if (index !== -1) landDatabase[index] = { ...newItem, synced: false };  
-        editingId = null;  
-        document.querySelector('#landForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> ບັນທຶກ';  
-        showToast('ອັບເດດສຳເລັດ!', 'success');  
-    } else {  
-        landDatabase.push(newItem);  
-        showToast('ບັນທຶກສຳເລັດ!', 'success');  
-    }  
+    // ປ່ຽນປຸ່ມເປັນ Loading  
+    const submitBtn = document.getElementById('submitBtn');  
+    const originalText = submitBtn.innerHTML;  
+    submitBtn.innerHTML = '<span class="loading-spinner"></span> ກຳລັງບັນທຶກ...';  
+    submitBtn.disabled = true;  
       
-    saveToLocalStorage();  
-    resetForm();  
-    updateUI();  
-    if (isSupabaseConnected) await syncToSupabase();  
+    try {  
+        // ບັນທຶກໃສ່ LocalStorage ກ່ອນ  
+        if (editingId) {  
+            const index = landDatabase.findIndex(item => item.id === editingId);  
+            if (index !== -1) {  
+                landDatabase[index] = { ...newItem, synced: false };  
+            }  
+            editingId = null;  
+            document.querySelector('#landForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> ບັນທຶກ';  
+            showToast('📝 ອັບເດດຂໍ້ມູນໃນ Local ສຳເລັດ!', 'success');  
+        } else {  
+            landDatabase.push(newItem);  
+            showToast('📝 ບັນທຶກຂໍ້ມູນໃນ Local ສຳເລັດ!', 'success');  
+        }  
+          
+        saveToLocalStorage();  
+        resetForm();  
+        updateUI();  
+          
+        // ຖ້າເຊື່ອມຕໍ່ Supabase ໄດ້, ບັນທຶກໃສ່ Cloud  
+        if (isSupabaseConnected) {  
+            showToast('☁️ ກຳລັງບັນທຶກໃສ່ Cloud...', 'info');  
+            await syncToSupabase();  
+        } else {  
+            showToast('⚠️ ບໍ່ເຊື່ອມຕໍ່ Cloud! ຂໍ້ມູນຖືກບັນທຶກໃນ Local ເທົ່ານັ້ນ', 'warning');  
+        }  
+    } catch (error) {  
+        console.error('Add land error:', error);  
+        showToast('❌ ບັນທຶກຂໍ້ມູນລົ້ມເຫຼວ!', 'error');  
+    } finally {  
+        // ກັບຄືນປຸ່ມ  
+        submitBtn.innerHTML = originalText;  
+        submitBtn.disabled = false;  
+    }  
 }  
   
 async function syncToSupabase() {  
     if (!isSupabaseConnected) {  
-        showToast('ບໍ່ສາມາດ Sync ໄດ້!', 'error');  
+        showToast('❌ ບໍ່ສາມາດ Sync ໄດ້! ກະລຸນາເຊື່ອມຕໍ່ Supabase ກ່ອນ', 'error');  
         return;  
     }  
+      
+    if (isSyncing) {  
+        showToast('⏳ ກຳລັງ Sync ຢູ່, ກະລຸນາລໍຖ້າ...', 'info');  
+        return;  
+    }  
+      
     const unsynced = landDatabase.filter(item => !item.synced);  
     if (unsynced.length === 0) {  
-        showToast('ບໍ່ມີຂໍ້ມູນທີ່ຕ້ອງ Sync!', 'info');  
+        showToast('✅ ບໍ່ມີຂໍ້ມູນທີ່ຕ້ອງ Sync!', 'success');  
         return;  
     }  
-    showToast(`ກຳລັງ Sync ${unsynced.length} ລາຍການ...`, 'info');  
+      
+    isSyncing = true;  
+    document.getElementById('connectionStatus').className = 'status-badge syncing';  
+    document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-spinner fa-spin"></i> ກຳລັງ Sync...';  
+      
+    showToast(`⏳ ກຳລັງ Sync ${unsynced.length} ລາຍການໃສ່ Cloud...`, 'info');  
+      
     let success = 0;  
+    let errors = [];  
+      
     for (const item of unsynced) {  
-        const { data: existing } = await supabase.from(TABLE_NAME).select('id').eq('id', item.id).single();  
-        let result;  
-        const data = {  
-            title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-            area: item.area, width: item.width, address: item.address, deed: item.deed,  
-            lat: item.lat, lng: item.lng, date: item.date, images: item.images || []  
-        };  
-        if (existing) {  
-            result = await supabase.from(TABLE_NAME).update(data).eq('id', item.id);  
-        } else {  
-            result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...data }]);  
-        }  
-        if (!result.error) {  
-            const dbItem = landDatabase.find(d => d.id === item.id);  
-            if (dbItem) dbItem.synced = true;  
-            success++;  
+        try {  
+            // ກວດສອບວ່າມີຂໍ້ມູນນີ້ແລ້ວບໍ  
+            const { data: existing, error: checkError } = await supabase  
+                .from(TABLE_NAME)  
+                .select('id')  
+                .eq('id', item.id)  
+                .maybeSingle();  
+              
+            if (checkError && checkError.code !== 'PGRST116') {  
+                console.error('Check error:', checkError);  
+                errors.push({ id: item.id, error: checkError.message });  
+                continue;  
+            }  
+              
+            // ກຽມຂໍ້ມູນສຳລັບບັນທຶກ  
+            const dataToSave = {  
+                title: item.title,  
+                phone: item.phone,  
+                price: item.price,  
+                currency: item.currency,  
+                area: item.area,  
+                width: item.width,  
+                address: item.address,  
+                deed: item.deed,  
+                lat: item.lat,  
+                lng: item.lng,  
+                date: item.date,  
+                images: item.images || []  
+            };  
+              
+            let result;  
+            if (existing) {  
+                // ອັບເດດຂໍ້ມູນ  
+                result = await supabase  
+                    .from(TABLE_NAME)  
+                    .update(dataToSave)  
+                    .eq('id', item.id);  
+            } else {  
+                // ເພີ່ມຂໍ້ມູນໃໝ່  
+                result = await supabase  
+                    .from(TABLE_NAME)  
+                    .insert([{ id: item.id, ...dataToSave }]);  
+            }  
+              
+            if (result.error) {  
+                console.error('Sync error for item', item.id, ':', result.error);  
+                errors.push({ id: item.id, error: result.error.message });  
+            } else {  
+                const dbItem = landDatabase.find(d => d.id === item.id);  
+                if (dbItem) dbItem.synced = true;  
+                success++;  
+            }  
+        } catch (e) {  
+            console.error('Sync error for item', item.id, ':', e);  
+            errors.push({ id: item.id, error: e.message });  
         }  
     }  
+      
+    // ບັນທຶກສະຖານະ  
     saveToLocalStorage();  
     updatePendingSync();  
-    showToast(`Sync ${success}/${unsynced.length} ສຳເລັດ!`, 'success');  
-    await loadFromSupabase();  
+      
+    // ສະແດງຜົນລັບ  
+    if (errors.length === 0) {  
+        showToast(`✅ Sync ${success}/${unsynced.length} ລາຍການສຳເລັດ!`, 'success');  
+    } else {  
+        showToast(`⚠️ Sync ${success}/${unsynced.length} ສຳເລັດ, ມີ ${errors.length} ລາຍການທີ່ຜິດພາດ`, 'warning');  
+        console.error('Sync errors:', errors);  
+    }  
+      
+    // ອັບເດດສະຖານະ  
+    document.getElementById('connectionStatus').className = 'status-badge online';  
+    document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';  
+    isSyncing = false;  
+      
+    // ໂຫຼດຂໍ້ມູນຈາກ Cloud ມາອັບເດດ  
+    if (success > 0) {  
+        await loadFromSupabase();  
+    }  
 }  
   
 async function deleteLand(id) {  
@@ -925,7 +1048,7 @@ async function deleteLand(id) {
         try { await supabase.from(TABLE_NAME).delete().eq('id', id); } catch(e) {}  
     }  
     updateUI();  
-    showToast('ລຶບສຳເລັດ!', 'success');  
+    showToast('🗑️ ລຶບສຳເລັດ!', 'success');  
 }  
   
 async function clearAllData() {  
@@ -936,7 +1059,7 @@ async function clearAllData() {
         try { await supabase.from(TABLE_NAME).delete().neq('id', 0); } catch(e) {}  
     }  
     updateUI();  
-    showToast('ລຶບທັງໝົດແລ້ວ!', 'warning');  
+    showToast('🗑️ ລຶບທັງໝົດແລ້ວ!', 'warning');  
 }  
   
 // =============================================  
@@ -947,7 +1070,7 @@ function searchNearest() {
     const targetLng = parseFloat(document.getElementById('targetLng').value);  
     const maxDistance = parseFloat(document.getElementById('distanceRange').value);  
     if (isNaN(targetLat) || isNaN(targetLng)) {  
-        showToast('ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ!', 'error');  
+        showToast('❌ ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ!', 'error');  
         return;  
     }  
       
@@ -1002,7 +1125,6 @@ function searchNearest() {
         card.style.borderLeftColor = index === 0 ? '#28a745' : '#3498db';  
         const currencyBadge = { KIP: 'kip', THB: 'baht', USD: 'usd' }[item.currency] || 'usd';  
           
-        // ສະແດງຮູບຫຼາຍຮູບ  
         let imagesHtml = '';  
         if (item.images && item.images.length > 0) {  
             const firstImage = item.images[0];  
@@ -1015,6 +1137,9 @@ function searchNearest() {
             `;  
         }  
           
+        const syncIcon = item.synced ? '✅' : '🔄';  
+        const syncLabel = item.synced ? 'Synced' : 'Pending';  
+          
         card.innerHTML = `  
             ${imagesHtml}  
             <div class="title">${item.title}</div>  
@@ -1023,7 +1148,7 @@ function searchNearest() {
                 <span class="badge badge-currency currency-badge ${currencyBadge}">${CURRENCY_SYMBOLS[item.currency]} ${CURRENCY_NAMES[item.currency]}</span>  
                 <span class="badge badge-price">💰 ${item.displayPrice}</span>  
                 <span class="badge badge-distance">📏 ${item.distance.toFixed(1)} ກມ</span>  
-                <span class="badge badge-sync">${item.synced ? '✅' : '🔄'}</span>  
+                <span class="badge badge-sync">${syncIcon} ${syncLabel}</span>  
             </div>  
             <div style="font-size:12px;color:#666;margin:4px 0;">📍 ${item.address} | ເນື້ອທີ່: ${item.area}</div>  
             <div style="font-size:11px;color:#999;">📞 ${item.phone} | 📅 ${item.date}</div>  
@@ -1122,6 +1247,7 @@ function editLand(id) {
     map.setView([item.lat, item.lng], 15);  
     updateCurrencySymbol();  
     scrollToSection('sectionAdd');  
+    showToast(`📝 ກຳລັງແກ້ໄຂ: ${item.title}`, 'info');  
 }  
   
 function resetForm() {  
@@ -1194,6 +1320,7 @@ function showDetail(id) {
         <div class="btn-group" style="margin-top:12px;">  
             <button class="btn btn-primary btn-sm" onclick="closeModal();map.setView([${item.lat}, ${item.lng}], 16);"><i class="fas fa-map"></i> ເບິ່ງໃນແຜນທີ່</button>  
             <button class="btn btn-warning btn-sm" onclick="closeModal();editLand(${item.id});"><i class="fas fa-edit"></i> ແກ້ໄຂ</button>  
+            ${!item.synced ? `<button class="btn btn-primary btn-sm" onclick="closeModal();syncSingleItem(${item.id});"><i class="fas fa-cloud-upload-alt"></i> Sync</button>` : ''}  
         </div>  
     `;  
     document.getElementById('detailModal').style.display = 'flex';  
@@ -1203,28 +1330,44 @@ function closeModal() { document.getElementById('detailModal').style.display = '
   
 async function syncSingleItem(id) {  
     const item = landDatabase.find(d => d.id === id);  
-    if (!item || !isSupabaseConnected) { showToast('ບໍ່ສາມາດ Sync ໄດ້!', 'error'); return; }  
+    if (!item || !isSupabaseConnected) { showToast('❌ ບໍ່ສາມາດ Sync ໄດ້!', 'error'); return; }  
+    if (isSyncing) { showToast('⏳ ກຳລັງ Sync ຢູ່...', 'info'); return; }  
+      
+    isSyncing = true;  
     try {  
-        const data = {  
-            title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-            area: item.area, width: item.width, address: item.address, deed: item.deed,  
-            lat: item.lat, lng: item.lng, date: item.date, images: item.images || []  
+        const dataToSave = {  
+            title: item.title,  
+            phone: item.phone,  
+            price: item.price,  
+            currency: item.currency,  
+            area: item.area,  
+            width: item.width,  
+            address: item.address,  
+            deed: item.deed,  
+            lat: item.lat,  
+            lng: item.lng,  
+            date: item.date,  
+            images: item.images || []  
         };  
-        const { data: existing } = await supabase.from(TABLE_NAME).select('id').eq('id', id).single();  
+          
+        const { data: existing } = await supabase.from(TABLE_NAME).select('id').eq('id', id).maybeSingle();  
         let result;  
         if (existing) {  
-            result = await supabase.from(TABLE_NAME).update(data).eq('id', id);  
+            result = await supabase.from(TABLE_NAME).update(dataToSave).eq('id', id);  
         } else {  
-            result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...data }]);  
+            result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...dataToSave }]);  
         }  
         if (!result.error) {  
             item.synced = true;  
             saveToLocalStorage();  
             updatePendingSync();  
             searchNearest();  
-            showToast('Sync ສຳເລັດ!', 'success');  
+            showToast('✅ Sync ສຳເລັດ!', 'success');  
+        } else {  
+            showToast('❌ Sync ລົ້ມເຫຼວ!', 'error');  
         }  
-    } catch(e) { showToast('Sync ລົ້ມເຫຼວ!', 'error'); }  
+    } catch(e) { showToast('❌ Sync ລົ້ມເຫຼວ!', 'error'); }  
+    isSyncing = false;  
 }  
   
 function showAllMarkers() {  
@@ -1242,10 +1385,10 @@ function showAllMarkers() {
 function resetMapView() { map.setView([17.9757, 102.6331], 13); }  
   
 function exportCSV() {  
-    if (landDatabase.length === 0) { showToast('ບໍ່ມີຂໍ້ມູນ!', 'warning'); return; }  
-    let csv = 'ID,ຊື່,ລາຄາ,ສະກຸນ,USD,THB,KIP,ເນື້ອທີ່,ໜ້າກວ້າງ,ທີ່ຢູ່,ໃບຕາດິນ,ເບີໂທ,ວັນທີ,Lat,Lng,ຈຳນວນຮູບ\n';  
+    if (landDatabase.length === 0) { showToast('❌ ບໍ່ມີຂໍ້ມູນ!', 'warning'); return; }  
+    let csv = 'ID,ຊື່,ລາຄາ,ສະກຸນ,USD,THB,KIP,ເນື້ອທີ່,ໜ້າກວ້າງ,ທີ່ຢູ່,ໃບຕາດິນ,ເບີໂທ,ວັນທີ,Lat,Lng,ຈຳນວນຮູບ,Sync\n';  
     landDatabase.forEach(item => {  
-        csv += `${item.id},"${item.title}",${item.price},"${item.currency}",${convertCurrency(item.price, item.currency, 'USD').toFixed(2)},${convertCurrency(item.price, item.currency, 'THB').toFixed(2)},${convertCurrency(item.price, item.currency, 'KIP').toFixed(0)},"${item.area}","${item.width}","${item.address}","${item.deed}","${item.phone}","${item.date}",${item.lat},${item.lng},${item.images ? item.images.length : 0}\n`;  
+        csv += `${item.id},"${item.title}",${item.price},"${item.currency}",${convertCurrency(item.price, item.currency, 'USD').toFixed(2)},${convertCurrency(item.price, item.currency, 'THB').toFixed(2)},${convertCurrency(item.price, item.currency, 'KIP').toFixed(0)},"${item.area}","${item.width}","${item.address}","${item.deed}","${item.phone}","${item.date}",${item.lat},${item.lng},${item.images ? item.images.length : 0},${item.synced}\n`;  
     });  
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });  
     const a = document.createElement('a');  
@@ -1253,7 +1396,7 @@ function exportCSV() {
     a.download = `land_data_${new Date().toISOString().slice(0,10)}.csv`;  
     a.click();  
     URL.revokeObjectURL(a.href);  
-    showToast('ສົ່ງອອກ CSV ສຳເລັດ!', 'success');  
+    showToast('📥 ສົ່ງອອກ CSV ສຳເລັດ!', 'success');  
 }  
   
 function showToast(message, type = 'success') {  
@@ -1265,7 +1408,7 @@ function showToast(message, type = 'success') {
     if (type === 'info') toast.classList.add('info');  
     toast.classList.add('show');  
     clearTimeout(toast._timeout);  
-    toast._timeout = setTimeout(() => toast.classList.remove('show'), 3500);  
+    toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);  
 }  
   
 // =============================================  
@@ -1287,7 +1430,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let markersLayer = L.layerGroup().addTo(map);  
 let tempMarker = null;  
   
-// ຄລິກແຜນທີ່ເພື່ອເລືອກພິກັດ (ຍັງສາມາດພີມເອງໄດ້)  
 map.on('click', function(e) {  
     const lat = e.latlng.lat.toFixed(6);  
     const lng = e.latlng.lng.toFixed(6);  
@@ -1296,7 +1438,7 @@ map.on('click', function(e) {
     if (tempMarker) map.removeLayer(tempMarker);  
     tempMarker = L.marker([lat, lng], { draggable: true }).addTo(map)  
         .bindPopup("📍 ຈຸດທີ່ເລືອກ").openPopup();  
-    showToast('ເລືອກພິກັດແລ້ວ! (ສາມາດພີມແກ້ໄຂໄດ້)', 'info');  
+    showToast('📍 ເລືອກພິກັດແລ້ວ! (ສາມາດພີມແກ້ໄຂໄດ້)', 'info');  
 });  
   
 // =============================================  
@@ -1318,6 +1460,7 @@ document.addEventListener('keydown', function(e) {
 console.log('🏠 ລະບົບພ້ອມໃຊ້ງານແລ້ວ!');  
 console.log('📍 ພິກັດ: ພີມໄດ້ ຫຼື ຄລິກແຜນທີ່');  
 console.log('📸 ອັບໂຫຼດຮູບໄດ້ສູງສຸດ 5 ຮູບ');  
+console.log('☁️ Supabase: ' + (isSupabaseConnected ? 'ເຊື່ອມຕໍ່ແລ້ວ' : 'ບໍ່ເຊື່ອມຕໍ່'));  
 console.log('📊 ມີຂໍ້ມູນ', landDatabase.length, 'ລາຍການ');  
 </script>  
 </body>  
