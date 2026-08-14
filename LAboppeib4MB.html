@@ -636,11 +636,11 @@
   
 <script>  
 // =============================================  
-// 1. SUPABASE CONFIG - ປ່ຽນຄ່ານີ້ໃຫ້ເປັນຂອງເຈົ້າ  
+// 1. SUPABASE CONFIG - ໃຊ້ຊື່ຕາຕະລາງທີ່ເຈົ້າສ້າງ  
 // =============================================  
-const SUPABASE_URL = 'https://gwjpjkdcncmlwdhwihbg.supabase.co';  
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3anBqa2RjbmNtbHdkaHdpaGJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2OTM4NDIsImV4cCI6MjEwMjI2OTg0Mn0.t4S4mTr-cAE1vnioh_Dy3mWAI_33RdCwAI8Kqcdhffw';  
-const TABLE_NAME = 'lands';  
+const SUPABASE_URL = 'https://otqhrpbhxkhkrhnjqbha.supabase.co';  
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; // ເອົາ ANON KEY ຈາກ Supabase ມາໃສ່  
+const TABLE_NAME = 'marketplace_listings';  
   
 // =============================================  
 // 2. CURRENCY CONFIG  
@@ -753,13 +753,20 @@ function showImageFull(src) {
 // =============================================  
 async function initSupabase() {  
     try {  
-        supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);  
+        // ສ້າງ client ດ້ວຍ options ເພື່ອຫຼີກລ່ຽງ multiple instances  
+        supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {  
+            auth: {  
+                persistSession: false,  
+                autoRefreshToken: false,  
+                detectSessionInUrl: false  
+            }  
+        });  
           
         // ທົດສອບການເຊື່ອມຕໍ່  
         const { error } = await supabase.from(TABLE_NAME).select('count', { count: 'exact', head: true });  
           
         if (error) {  
-            console.error('Supabase connection error:', error);  
+            console.error('❌ Supabase connection error:', error);  
             throw error;  
         }  
           
@@ -768,23 +775,28 @@ async function initSupabase() {
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';  
         showToast('✅ ເຊື່ອມຕໍ່ Cloud ສຳເລັດ!', 'success');  
           
-        // ໂຫຼດຂໍ້ມູນ  
         await loadFromSupabase();  
         setupRealtimeSubscription();  
           
     } catch (e) {  
-        console.error('Supabase init error:', e);  
+        console.error('❌ Supabase init error:', e);  
         isSupabaseConnected = false;  
         document.getElementById('connectionStatus').className = 'status-badge offline';  
         document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອຟໄລນ໌';  
-        showToast('⚠️ ບໍ່ສາມາດເຊື່ອມຕໍ່ Cloud ໄດ້! ໃຊ້ LocalStorage ແທນ', 'warning');  
+          
+        // ກວດສອບວ່າເປັນຍ້ອນບໍ່ມີຕາຕະລາງ  
+        if (e.message && e.message.includes('relation') && e.message.includes('does not exist')) {  
+            showToast('⚠️ ຕາຕະລາງຍັງບໍ່ມີ! ກະລຸນາສ້າງຕາຕະລາງກ່ອນ', 'warning');  
+        } else {  
+            showToast('⚠️ ບໍ່ສາມາດເຊື່ອມຕໍ່ Cloud ໄດ້! ໃຊ້ LocalStorage ແທນ', 'warning');  
+        }  
         loadFromLocalStorage();  
     }  
 }  
   
 function setupRealtimeSubscription() {  
     if (!isSupabaseConnected) return;  
-    supabase.channel('lands-changes')  
+    supabase.channel('marketplace-changes')  
         .on('postgres_changes', { event: '*', schema: 'public', table: TABLE_NAME }, () => {  
             loadFromSupabase();  
             showToast('🔄 ມີການປ່ຽນແປງຂໍ້ມູນ!', 'info');  
@@ -926,7 +938,6 @@ async function addNewLand(event) {
         console.error('Add land error:', error);  
         showToast('❌ ບັນທຶກຂໍ້ມູນລົ້ມເຫຼວ!', 'error');  
     } finally {  
-        // ກັບຄືນປຸ່ມ  
         submitBtn.innerHTML = originalText;  
         submitBtn.disabled = false;  
     }  
@@ -960,7 +971,6 @@ async function syncToSupabase() {
       
     for (const item of unsynced) {  
         try {  
-            // ກວດສອບວ່າມີຂໍ້ມູນນີ້ແລ້ວບໍ  
             const { data: existing, error: checkError } = await supabase  
                 .from(TABLE_NAME)  
                 .select('id')  
@@ -973,7 +983,6 @@ async function syncToSupabase() {
                 continue;  
             }  
               
-            // ກຽມຂໍ້ມູນສຳລັບບັນທຶກ  
             const dataToSave = {  
                 title: item.title,  
                 phone: item.phone,  
@@ -991,16 +1000,9 @@ async function syncToSupabase() {
               
             let result;  
             if (existing) {  
-                // ອັບເດດຂໍ້ມູນ  
-                result = await supabase  
-                    .from(TABLE_NAME)  
-                    .update(dataToSave)  
-                    .eq('id', item.id);  
+                result = await supabase.from(TABLE_NAME).update(dataToSave).eq('id', item.id);  
             } else {  
-                // ເພີ່ມຂໍ້ມູນໃໝ່  
-                result = await supabase  
-                    .from(TABLE_NAME)  
-                    .insert([{ id: item.id, ...dataToSave }]);  
+                result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...dataToSave }]);  
             }  
               
             if (result.error) {  
@@ -1017,11 +1019,9 @@ async function syncToSupabase() {
         }  
     }  
       
-    // ບັນທຶກສະຖານະ  
     saveToLocalStorage();  
     updatePendingSync();  
       
-    // ສະແດງຜົນລັບ  
     if (errors.length === 0) {  
         showToast(`✅ Sync ${success}/${unsynced.length} ລາຍການສຳເລັດ!`, 'success');  
     } else {  
@@ -1029,12 +1029,10 @@ async function syncToSupabase() {
         console.error('Sync errors:', errors);  
     }  
       
-    // ອັບເດດສະຖານະ  
     document.getElementById('connectionStatus').className = 'status-badge online';  
     document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-circle"></i> Cloud: ອອນໄລນ໌';  
     isSyncing = false;  
       
-    // ໂຫຼດຂໍ້ມູນຈາກ Cloud ມາອັບເດດ  
     if (success > 0) {  
         await loadFromSupabase();  
     }  
@@ -1460,8 +1458,9 @@ document.addEventListener('keydown', function(e) {
 console.log('🏠 ລະບົບພ້ອມໃຊ້ງານແລ້ວ!');  
 console.log('📍 ພິກັດ: ພີມໄດ້ ຫຼື ຄລິກແຜນທີ່');  
 console.log('📸 ອັບໂຫຼດຮູບໄດ້ສູງສຸດ 5 ຮູບ');  
-console.log('☁️ Supabase: ' + (isSupabaseConnected ? 'ເຊື່ອມຕໍ່ແລ້ວ' : 'ບໍ່ເຊື່ອມຕໍ່'));  
 console.log('📊 ມີຂໍ້ມູນ', landDatabase.length, 'ລາຍການ');  
+console.log('☁️ Supabase URL:', SUPABASE_URL);  
+console.log('📋 ຊື່ຕາຕະລາງ:', TABLE_NAME);  
 </script>  
 </body>  
 </html>  
