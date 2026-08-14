@@ -27,10 +27,8 @@
             padding: 15px;   
             border-radius: 16px;   
             box-shadow: 0 10px 40px rgba(0,0,0,0.12);   
-            backdrop-filter: blur(10px);  
         }  
           
-        /* ===== HEADER ===== */  
         h2 {   
             color: #2c3e50;   
             border-bottom: 4px solid #3498db;   
@@ -62,30 +60,25 @@
         }  
         .status-badge.online { background: #28a745; color: white; }  
         .status-badge.offline { background: #dc3545; color: white; }  
-        .status-badge.sync { background: #ffc107; color: #333; animation: pulse 1s infinite; }  
           
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }  
-          
-        /* ===== STATS ===== */  
         .stats-bar {   
             display: grid;   
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));   
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));   
             gap: 10px;   
             margin-bottom: 15px;   
         }  
         .stat-card {   
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);   
             color: white;   
-            padding: 12px 10px;   
+            padding: 10px 8px;   
             border-radius: 12px;   
             text-align: center;   
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);   
         }  
-        .stat-card i { font-size: clamp(18px, 3vw, 24px); margin-bottom: 3px; display: block; }  
-        .stat-card .number { font-size: clamp(20px, 4vw, 28px); font-weight: bold; }  
-        .stat-card .label { font-size: clamp(10px, 1.5vw, 14px); opacity: 0.9; }  
+        .stat-card i { font-size: clamp(16px, 3vw, 24px); margin-bottom: 2px; display: block; }  
+        .stat-card .number { font-size: clamp(18px, 4vw, 28px); font-weight: bold; }  
+        .stat-card .label { font-size: clamp(9px, 1.5vw, 14px); opacity: 0.9; }  
           
-        /* ===== GRID ===== */  
         .grid {   
             display: grid;   
             grid-template-columns: 1fr;   
@@ -95,7 +88,6 @@
         @media(min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; } }  
         @media(min-width: 1200px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }  
           
-        /* ===== FORM ===== */  
         .form-section {   
             background: #f8f9fa;   
             padding: 15px;   
@@ -139,9 +131,7 @@
             outline: none;   
             box-shadow: 0 0 0 3px rgba(52,152,219,0.1);   
         }  
-        input:disabled { background: #f1f3f5; cursor: not-allowed; }  
           
-        /* ===== BUTTONS ===== */  
         .btn {   
             padding: 12px 16px;   
             border: none;   
@@ -155,38 +145,30 @@
             justify-content: center;   
             gap: 8px;   
             width: 100%;  
+            min-height: 48px;  
             -webkit-tap-highlight-color: transparent;  
             touch-action: manipulation;  
-            min-height: 48px;  
         }  
         .btn:active { transform: scale(0.97); }  
           
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }  
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }  
         .btn-success { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); color: white; }  
-        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(86,171,47,0.4); }  
         .btn-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }  
-        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(245,87,108,0.4); }  
         .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }  
-        .btn-info:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(79,172,254,0.4); }  
         .btn-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; }  
-        .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(253,160,133,0.4); }  
         .btn-secondary { background: #6c757d; color: white; }  
-        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(108,117,125,0.4); }  
           
         .btn-sm { padding: 8px 12px; font-size: clamp(11px, 1.5vw, 13px); width: auto; min-height: 36px; }  
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }  
-        .btn-group .btn { width: auto; flex: 1; min-width: 70px; }  
+        .btn-group .btn { width: auto; flex: 1; min-width: 60px; }  
           
-        /* ===== MAP ===== */  
         #map {   
-            height: clamp(300px, 50vh, 550px);   
+            height: clamp(280px, 45vh, 550px);   
             border-radius: 12px;   
             border: 2px solid #e9ecef;   
             touch-action: pan-x pan-y;  
         }  
           
-        /* ===== RESULTS ===== */  
         .result-card {   
             background: white;   
             padding: 12px;   
@@ -194,9 +176,7 @@
             border-radius: 12px;   
             border-left: 5px solid #3498db;   
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);   
-            transition: all 0.3s;   
         }  
-        .result-card:active { transform: scale(0.99); }  
         .result-card .title { font-size: clamp(14px, 2vw, 16px); font-weight: bold; color: #2c3e50; }  
         .result-card .badge {   
             display: inline-block;   
@@ -215,12 +195,11 @@
           
         #resultsList { max-height: 400px; overflow-y: auto; -webkit-overflow-scrolling: touch; }  
           
-        /* ===== TOAST ===== */  
         .toast {   
             position: fixed;   
             top: 10px;   
-            right: 10px;   
-            left: 10px;  
+            left: 10px;   
+            right: 10px;  
             background: #28a745;   
             color: white;   
             padding: 14px 20px;   
@@ -239,7 +218,6 @@
         .toast.warning { background: #ffc107; color: #333; }  
         .toast.info { background: #17a2b8; }  
           
-        /* ===== MODAL ===== */  
         .modal {   
             display: none;   
             position: fixed;   
@@ -276,11 +254,9 @@
         }  
         .modal .close:hover { color: #333; }  
           
-        /* ===== FILTER ===== */  
         .filter-section { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }  
-        .filter-section input, .filter-section select { width: auto; flex: 1; min-width: 100px; }  
+        .filter-section input, .filter-section select { width: auto; flex: 1; min-width: 80px; }  
           
-        /* ===== RANGE SLIDER ===== */  
         .range-slider {   
             display: flex;   
             gap: 10px;   
@@ -327,9 +303,8 @@
             text-align: center;   
         }  
           
-        /* ===== OTHER ===== */  
         .currency-converter { background: #f1f3f5; padding: 10px; border-radius: 10px; margin-top: 10px; }  
-        .currency-converter .rate { display: inline-block; margin: 0 8px; font-size: clamp(11px, 1.5vw, 13px); color: #666; }  
+        .currency-converter .rate { display: inline-block; margin: 0 5px; font-size: clamp(10px, 1.5vw, 13px); color: #666; }  
         .currency-converter .rate strong { color: #2c3e50; }  
           
         .range-info {   
@@ -347,9 +322,33 @@
         .range-info .count { font-size: clamp(16px, 2vw, 18px); font-weight: bold; color: #2c3e50; }  
         .range-info .count span { color: #3498db; }  
           
-        .image-preview { max-width: 80px; max-height: 80px; margin: 5px 0; border-radius: 8px; border: 2px solid #e9ecef; object-fit: cover; }  
-        .image-thumbnail { max-width: 50px; max-height: 50px; border-radius: 8px; cursor: pointer; object-fit: cover; transition: all 0.3s; border: 2px solid transparent; }  
-        .image-thumbnail:hover { transform: scale(1.1); border-color: #3498db; }  
+        .image-preview {   
+            width: 80px;   
+            height: 80px;   
+            object-fit: cover;   
+            border-radius: 8px;   
+            border: 2px solid #e9ecef;   
+            cursor: pointer;  
+        }  
+        .image-thumbnail {   
+            width: 50px;   
+            height: 50px;   
+            object-fit: cover;   
+            border-radius: 8px;   
+            cursor: pointer;   
+            border: 2px solid transparent;   
+        }  
+        .image-thumbnail:hover { border-color: #3498db; }  
+        .image-wrapper { position: relative; display: inline-block; }  
+        .image-wrapper .delete-btn {  
+            position: absolute; top: -6px; right: -6px;  
+            background: #dc3545; color: white; border: none;  
+            border-radius: 50%; width: 20px; height: 20px;  
+            font-size: 12px; cursor: pointer;  
+            display: flex; align-items: center; justify-content: center;  
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);  
+        }  
+        .image-wrapper .delete-btn:active { transform: scale(0.9); }  
           
         .flex { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }  
         .flex-wrap { flex-wrap: wrap; }  
@@ -358,11 +357,6 @@
         .mb-10 { margin-bottom: 10px; }  
         .text-center { text-align: center; }  
           
-        .loading { text-align: center; padding: 20px; color: #666; }  
-        .loading i { font-size: 30px; color: #3498db; animation: spin 1s linear infinite; }  
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }  
-          
-        /* ===== BOTTOM NAVIGATION ===== */  
         .mobile-bottom-nav {  
             display: none;  
             position: fixed;  
@@ -371,7 +365,7 @@
             right: 0;  
             background: white;  
             border-top: 1px solid #e9ecef;  
-            padding: 8px 0;  
+            padding: 6px 0;  
             box-shadow: 0 -4px 20px rgba(0,0,0,0.08);  
             z-index: 9997;  
             justify-content: space-around;  
@@ -382,7 +376,7 @@
             flex-direction: column;  
             align-items: center;  
             gap: 2px;  
-            padding: 4px 12px;  
+            padding: 4px 8px;  
             border: none;  
             background: none;  
             font-size: 10px;  
@@ -402,7 +396,6 @@
             .container { padding: 12px; border-radius: 12px; }  
         }  
           
-        /* ===== PRINT ===== */  
         @media print { .btn, .form-section, .stats-bar, .mobile-bottom-nav { display: none; } }  
     </style>  
 </head>  
@@ -411,7 +404,7 @@
 <div class="container">  
     <h2>  
         <i class="fas fa-landmark"></i>   
-        <span style="flex:1;min-width:150px;">ລະບົບຈັດການລາຄາຕອນດິນ</span>  
+        <span style="flex:1;min-width:120px;">ລະບົບຈັດການລາຄາຕອນດິນ</span>  
         <span class="badge-group">  
             <span class="currency-badge kip">₭ ກີບ</span>  
             <span class="currency-badge baht">฿ ບາດ</span>  
@@ -420,7 +413,7 @@
         </span>  
     </h2>  
       
-    <div class="stats-bar" id="statsBar">  
+    <div class="stats-bar">  
         <div class="stat-card"><i class="fas fa-map-marker-alt"></i><div class="number" id="totalLands">0</div><div class="label">ທັງໝົດ</div></div>  
         <div class="stat-card"><i class="fas fa-dollar-sign"></i><div class="number" id="avgPrice">0</div><div class="label">ລາຄາສະເລ່ຍ</div></div>  
         <div class="stat-card"><i class="fas fa-arrows-alt-h"></i><div class="number" id="avgArea">0</div><div class="label">ເນື້ອທີ່ສະເລ່ຍ</div></div>  
@@ -443,11 +436,11 @@
                 </div>  
                   
                 <div class="flex flex-wrap gap-5">  
-                    <div class="form-group" style="flex:2;min-width:120px;">  
+                    <div class="form-group" style="flex:2;min-width:100px;">  
                         <label><i class="fas fa-money-bill-wave"></i> ລາຄາ</label>  
                         <input type="number" id="newPrice" placeholder="ລາຄາ" required step="0.01" min="0" inputmode="decimal">  
                     </div>  
-                    <div class="form-group" style="flex:1;min-width:90px;">  
+                    <div class="form-group" style="flex:1;min-width:80px;">  
                         <label><i class="fas fa-coins"></i> ສະກຸນ</label>  
                         <select id="newCurrency" onchange="updateCurrencySymbol()">  
                             <option value="KIP">₭ ກີບ</option>  
@@ -457,24 +450,24 @@
                     </div>  
                 </div>  
                   
-                <div class="currency-converter" id="currencyConverter">  
-                    <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:space-between;align-items:center;font-size:clamp(11px,1.5vw,13px);">  
+                <div class="currency-converter">  
+                    <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:space-between;align-items:center;font-size:clamp(10px,1.5vw,13px);">  
                         <span><i class="fas fa-sync-alt"></i> <strong>ອັດຕາແລກປ່ຽນ</strong></span>  
                         <span class="rate">1 USD = <strong id="rateUSDToKIP">25,000</strong> ₭</span>  
                         <span class="rate">1 USD = <strong id="rateUSDToTHB">34</strong> ฿</span>  
                     </div>  
-                    <div style="margin-top:6px;font-size:clamp(11px,1.5vw,13px);color:#666;">  
+                    <div style="margin-top:6px;font-size:clamp(10px,1.5vw,13px);color:#666;">  
                         <i class="fas fa-exchange-alt"></i> ລາຄາໃນສະກຸນອື່ນ:   
                         <span id="convertedPriceDisplay">-</span>  
                     </div>  
                 </div>  
                   
                 <div class="flex flex-wrap gap-5">  
-                    <div class="form-group" style="flex:1;min-width:100px;">  
+                    <div class="form-group" style="flex:1;min-width:80px;">  
                         <label><i class="fas fa-ruler-combined"></i> ເນື້ອທີ່ (ຕມ)</label>  
                         <input type="text" id="newArea" placeholder="500" inputmode="numeric">  
                     </div>  
-                    <div class="form-group" style="flex:1;min-width:100px;">  
+                    <div class="form-group" style="flex:1;min-width:80px;">  
                         <label><i class="fas fa-arrows-alt-h"></i> ໜ້າກວ້າງ (ມ)</label>  
                         <input type="text" id="newWidth" placeholder="15" inputmode="numeric">  
                     </div>  
@@ -491,18 +484,23 @@
                         <option value="ໃບແຈ້ງເຈດຈຳນົງ">ໃບແຈ້ງເຈດຈຳນົງ</option>  
                     </select>  
                 </div>  
+                  
+                <!-- ພິກັດ - ພີມໄດ້ ແລະ ຄລິກແຜນທີ່ໄດ້ -->  
                 <div class="form-group">  
-                    <label><i class="fas fa-map-marker-alt"></i> ພິກັດ (ຄລິກແຜນທີ່)</label>  
+                    <label><i class="fas fa-map-marker-alt"></i> ພິກັດ (ພີມເອງ ຫຼື ຄລິກແຜນທີ່)</label>  
                     <div class="flex gap-5">  
-                        <input type="text" id="newLat" placeholder="Lat" required readonly style="flex:1;font-size:12px;">  
-                        <input type="text" id="newLng" placeholder="Lng" required readonly style="flex:1;font-size:12px;">  
+                        <input type="text" id="newLat" placeholder="Latitude" required style="flex:1;font-size:12px;" inputmode="decimal">  
+                        <input type="text" id="newLng" placeholder="Longitude" required style="flex:1;font-size:12px;" inputmode="decimal">  
                     </div>  
                 </div>  
+                  
+                <!-- ອັບໂຫຼດຫຼາຍຮູບ (ສູງສຸດ 5 ຮູບ) -->  
                 <div class="form-group">  
-                    <label><i class="fas fa-image"></i> ຮູບພາບ</label>  
-                    <input type="file" id="newImage" accept="image/*" onchange="previewImage(event)">  
-                    <img id="imagePreview" class="image-preview" style="display:none;">  
+                    <label><i class="fas fa-images"></i> ອັບໂຫຼດຮູບ (ສູງສຸດ 5 ຮູບ)</label>  
+                    <input type="file" id="newImages" accept="image/*" multiple onchange="previewMultipleImages(event)">  
+                    <div id="imagePreviewContainer" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>  
                 </div>  
+                  
                 <div class="form-group">  
                     <label><i class="fas fa-calendar-alt"></i> ວັນທີ</label>  
                     <input type="date" id="newDate" required>  
@@ -520,23 +518,23 @@
                 <h3><i class="fas fa-search"></i> ຄົ້ນຫາ</h3>  
                   
                 <div class="form-group">  
-                    <label><i class="fas fa-route"></i> ໄລຍະຫ່າງ</label>  
+                    <label><i class="fas fa-route"></i> ໄລຍະຫ່າງ (ກມ)</label>  
                     <div class="range-slider">  
-                        <span style="font-size:12px;color:#666;min-width:40px;">0</span>  
+                        <span style="font-size:12px;color:#666;min-width:30px;">0</span>  
                         <input type="range" id="distanceRange" min="0" max="50" value="10" step="0.5" oninput="updateRangeDisplay()">  
-                        <span style="font-size:12px;color:#666;min-width:40px;">50+</span>  
+                        <span style="font-size:12px;color:#666;min-width:30px;">50+</span>  
                         <span class="range-label" id="rangeDisplay">10 ກມ</span>  
                     </div>  
                 </div>  
                   
                 <div class="filter-section">  
-                    <input type="text" id="searchKeyword" placeholder="🔍 ຄົ້ນຫາ..." oninput="filterResults()" style="min-width:80px;">  
-                    <select id="filterDeed" onchange="filterResults()" style="min-width:80px;">  
+                    <input type="text" id="searchKeyword" placeholder="🔍 ຄົ້ນຫາ..." oninput="filterResults()" style="min-width:70px;">  
+                    <select id="filterDeed" onchange="filterResults()" style="min-width:70px;">  
                         <option value="">ທຸກໃບຕາດິນ</option>  
                         <option value="ມີ (ໃບຕາດິນຂອບທອງ)">ມີຂອບທອງ</option>  
                         <option value="ສິດນຳໃຊ້ (ລໍຖ້າອອກຂອບທອງ)">ສິດນຳໃຊ້</option>  
                     </select>  
-                    <select id="filterCurrency" onchange="filterResults()" style="min-width:70px;">  
+                    <select id="filterCurrency" onchange="filterResults()" style="min-width:60px;">  
                         <option value="">ທຸກສະກຸນ</option>  
                         <option value="KIP">₭</option>  
                         <option value="THB">฿</option>  
@@ -559,7 +557,7 @@
                 </div>  
             </div>  
   
-            <div class="range-info" id="rangeInfo">  
+            <div class="range-info">  
                 <span><i class="fas fa-info-circle"></i> <span id="rangeInfoDisplay">10 ກິໂລແມັດ</span></span>  
                 <span class="count">ພົບ <span id="foundCount">0</span> ລາຍການ</span>  
             </div>  
@@ -581,7 +579,7 @@
                 <button class="btn btn-danger btn-sm" onclick="clearAllData()"><i class="fas fa-trash-alt"></i> ລຶບທັງໝົດ</button>  
             </div>  
             <p style="font-size:11px;color:#999;margin-top:8px;text-align:center;">  
-                💡 ຄລິກແຜນທີ່ເພື່ອເລືອກພິກັດ | ຄລິກໝາຍເລກເພື່ອເບິ່ງລາຍລະອຽດ  
+                💡 ຄລິກແຜນທີ່ເພື່ອເລືອກພິກັດ ຫຼື ພີມເອງ | ຄລິກໝາຍເລກເພື່ອເບິ່ງລາຍລະອຽດ  
             </p>  
         </div>  
     </div>  
@@ -644,6 +642,7 @@ let landDatabase = [];
 let editingId = null;  
 let isSupabaseConnected = false;  
 let supabase = null;  
+let uploadedImages = [];  
   
 // =============================================  
 // 4. MOBILE FUNCTIONS  
@@ -652,7 +651,6 @@ function scrollToSection(id) {
     const el = document.getElementById(id);  
     if (el) {  
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });  
-        // Update nav  
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));  
         const navItem = document.querySelector(`.nav-item[onclick*="${id}"]`);  
         if (navItem) navItem.classList.add('active');  
@@ -660,11 +658,8 @@ function scrollToSection(id) {
 }  
   
 function scrollToMap() {  
-    const map = document.getElementById('map');  
-    if (map) {  
-        map.scrollIntoView({ behavior: 'smooth', block: 'center' });  
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));  
-    }  
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });  
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));  
 }  
   
 // =============================================  
@@ -679,7 +674,75 @@ function updateRangeDisplay() {
 }  
   
 // =============================================  
-// 6. SUPABASE INIT  
+// 6. MULTIPLE IMAGE UPLOAD  
+// =============================================  
+function previewMultipleImages(event) {  
+    const files = event.target.files;  
+    const container = document.getElementById('imagePreviewContainer');  
+    container.innerHTML = '';  
+    uploadedImages = [];  
+      
+    if (files.length > 5) {  
+        showToast('ອັບໄດ້ສູງສຸດ 5 ຮູບເທົ່ານັ້ນ!', 'warning');  
+        event.target.value = '';  
+        return;  
+    }  
+      
+    for (let i = 0; i < files.length; i++) {  
+        const reader = new FileReader();  
+        reader.onload = function(e) {  
+            uploadedImages.push(e.target.result);  
+            const wrapper = document.createElement('div');  
+            wrapper.className = 'image-wrapper';  
+              
+            const img = document.createElement('img');  
+            img.src = e.target.result;  
+            img.className = 'image-preview';  
+            img.onclick = function() { showImageFull(e.target.result); };  
+              
+            const deleteBtn = document.createElement('button');  
+            deleteBtn.className = 'delete-btn';  
+            deleteBtn.innerHTML = '✕';  
+            deleteBtn.onclick = function(e) {  
+                e.stopPropagation();  
+                const idx = uploadedImages.indexOf(e.target.result);  
+                if (idx > -1) {  
+                    uploadedImages.splice(idx, 1);  
+                    previewMultipleImages({ target: { files: [] } });  
+                    // ອັບເດດໄຟລ໌ທີ່ເຫຼືອ  
+                    const dt = new DataTransfer();  
+                    const remaining = Array.from(files).filter((_, fi) => fi !== i);  
+                    remaining.forEach(f => dt.items.add(f));  
+                    document.getElementById('newImages').files = dt.files;  
+                    if (remaining.length > 0) {  
+                        previewMultipleImages({ target: { files: dt.files } });  
+                    }  
+                }  
+            };  
+              
+            wrapper.appendChild(img);  
+            wrapper.appendChild(deleteBtn);  
+            container.appendChild(wrapper);  
+        };  
+        reader.readAsDataURL(files[i]);  
+    }  
+}  
+  
+function showImageFull(src) {  
+    const modal = document.getElementById('detailModal');  
+    const body = document.getElementById('modalBody');  
+    body.innerHTML = `  
+        <div style="text-align:center;">  
+            <img src="${src}" style="max-width:100%;max-height:70vh;border-radius:12px;">  
+            <br><br>  
+            <button class="btn btn-secondary btn-sm" onclick="closeModal()">ປິດ</button>  
+        </div>  
+    `;  
+    modal.style.display = 'flex';  
+}  
+  
+// =============================================  
+// 7. SUPABASE INIT  
 // =============================================  
 async function initSupabase() {  
     try {  
@@ -713,7 +776,7 @@ function setupRealtimeSubscription() {
 }  
   
 // =============================================  
-// 7. DATA LOADING  
+// 8. DATA LOADING  
 // =============================================  
 async function loadFromSupabase() {  
     if (!isSupabaseConnected) { loadFromLocalStorage(); return; }  
@@ -737,15 +800,15 @@ function loadFromLocalStorage() {
             landDatabase = landDatabase.map(item => {  
                 if (!item.currency) item.currency = 'USD';  
                 if (typeof item.price === 'string') item.price = parseFloat(item.price.replace(/[^0-9.]/g, ''));  
+                if (!item.images) item.images = [];  
                 return item;  
             });  
         } catch(e) { landDatabase = []; }  
     } else {  
         landDatabase = [  
-            { id: 1, title: "ຂາຍດິນຕິດຖະໜົນ T2", phone: "2055551111", price: 1500000, currency: 'USD', area: "1200 ຕມ", width: "20 ມ", address: "ບ້ານ ດົງປ່າແຫຼບ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9820, lng: 102.6400, date: "2026-01-10", image: "", synced: true },  
-            { id: 2, title: "ດິນຈັດສັນ ໂພນທອງ", phone: "2099887766", price: 450000, currency: 'USD', area: "400 ຕມ", width: "12 ມ", address: "ບ້ານ ໂພນທອງ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9650, lng: 102.6200, date: "2026-02-15", image: "", synced: true },  
-            { id: 3, title: "ດິນຕິດນ້ຳ ສີທອງ", phone: "2088889999", price: 800000, currency: 'USD', area: "800 ຕມ", width: "16 ມ", address: "ບ້ານ ສີທອງ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9850, lng: 102.6500, date: "2026-03-01", image: "", synced: true },  
-            { id: 4, title: "ຂາຍດິນໃກ້ຕະຫຼາດ", phone: "2077778888", price: 250000000, currency: 'KIP', area: "600 ຕມ", width: "18 ມ", address: "ບ້ານ ດົງນາທອງ", deed: "ສິດນຳໃຊ້", lat: 17.9700, lng: 102.6300, date: "2026-03-15", image: "", synced: true }  
+            { id: 1, title: "ຂາຍດິນຕິດຖະໜົນ T2", phone: "2055551111", price: 1500000, currency: 'USD', area: "1200 ຕມ", width: "20 ມ", address: "ບ້ານ ດົງປ່າແຫຼບ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9820, lng: 102.6400, date: "2026-01-10", images: [], synced: true },  
+            { id: 2, title: "ດິນຈັດສັນ ໂພນທອງ", phone: "2099887766", price: 450000, currency: 'USD', area: "400 ຕມ", width: "12 ມ", address: "ບ້ານ ໂພນທອງ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9650, lng: 102.6200, date: "2026-02-15", images: [], synced: true },  
+            { id: 3, title: "ດິນຕິດນ້ຳ ສີທອງ", phone: "2088889999", price: 800000, currency: 'USD', area: "800 ຕມ", width: "16 ມ", address: "ບ້ານ ສີທອງ", deed: "ມີ (ໃບຕາດິນຂອບທອງ)", lat: 17.9850, lng: 102.6500, date: "2026-03-01", images: [], synced: true }  
         ];  
     }  
     saveToLocalStorage();  
@@ -764,16 +827,19 @@ function updateUI() {
 }  
   
 // =============================================  
-// 8. CRUD  
+// 9. CRUD  
 // =============================================  
 async function addNewLand(event) {  
     event.preventDefault();  
+      
     const lat = parseFloat(document.getElementById('newLat').value);  
     const lng = parseFloat(document.getElementById('newLng').value);  
+      
     if (isNaN(lat) || isNaN(lng)) {  
-        showToast('ກະລຸນາເລືອກພິກັດເທິງແຜນທີ່!', 'error');  
+        showToast('ກະລຸນາໃສ່ພິກັດໃຫ້ຖືກຕ້ອງ! (ຄລິກແຜນທີ່ ຫຼື ພີມເອງ)', 'error');  
         return;  
     }  
+      
     const price = parseFloat(document.getElementById('newPrice').value);  
     if (isNaN(price) || price <= 0) {  
         showToast('ກະລຸນາປ້ອນລາຄາ!', 'error');  
@@ -793,7 +859,7 @@ async function addNewLand(event) {
         lat: lat,  
         lng: lng,  
         date: document.getElementById('newDate').value,  
-        image: document.getElementById('imagePreview').style.display !== 'none' ? document.getElementById('imagePreview').src : '',  
+        images: uploadedImages.length > 0 ? uploadedImages : [],  
         synced: false  
     };  
       
@@ -829,18 +895,15 @@ async function syncToSupabase() {
     for (const item of unsynced) {  
         const { data: existing } = await supabase.from(TABLE_NAME).select('id').eq('id', item.id).single();  
         let result;  
+        const data = {  
+            title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
+            area: item.area, width: item.width, address: item.address, deed: item.deed,  
+            lat: item.lat, lng: item.lng, date: item.date, images: item.images || []  
+        };  
         if (existing) {  
-            result = await supabase.from(TABLE_NAME).update({  
-                title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-                area: item.area, width: item.width, address: item.address, deed: item.deed,  
-                lat: item.lat, lng: item.lng, date: item.date, image: item.image  
-            }).eq('id', item.id);  
+            result = await supabase.from(TABLE_NAME).update(data).eq('id', item.id);  
         } else {  
-            result = await supabase.from(TABLE_NAME).insert([{  
-                id: item.id, title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-                area: item.area, width: item.width, address: item.address, deed: item.deed,  
-                lat: item.lat, lng: item.lng, date: item.date, image: item.image  
-            }]);  
+            result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...data }]);  
         }  
         if (!result.error) {  
             const dbItem = landDatabase.find(d => d.id === item.id);  
@@ -877,7 +940,7 @@ async function clearAllData() {
 }  
   
 // =============================================  
-// 9. SEARCH  
+// 10. SEARCH  
 // =============================================  
 function searchNearest() {  
     const targetLat = parseFloat(document.getElementById('targetLat').value);  
@@ -939,8 +1002,21 @@ function searchNearest() {
         card.style.borderLeftColor = index === 0 ? '#28a745' : '#3498db';  
         const currencyBadge = { KIP: 'kip', THB: 'baht', USD: 'usd' }[item.currency] || 'usd';  
           
+        // ສະແດງຮູບຫຼາຍຮູບ  
+        let imagesHtml = '';  
+        if (item.images && item.images.length > 0) {  
+            const firstImage = item.images[0];  
+            const count = item.images.length;  
+            imagesHtml = `  
+                <div style="float:right;position:relative;cursor:pointer;" onclick="showDetail(${item.id})">  
+                    <img src="${firstImage}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;border:2px solid #e9ecef;">  
+                    ${count > 1 ? `<span style="position:absolute;bottom:-4px;right:-4px;background:#3498db;color:white;border-radius:50%;width:20px;height:20px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;">+${count-1}</span>` : ''}  
+                </div>  
+            `;  
+        }  
+          
         card.innerHTML = `  
-            ${item.image ? `<img src="${item.image}" class="image-thumbnail" onclick="showDetail(${item.id})" style="float:right;">` : ''}  
+            ${imagesHtml}  
             <div class="title">${item.title}</div>  
             <div>  
                 <span class="badge badge-deed">📄 ${item.deed}</span>  
@@ -963,7 +1039,7 @@ function searchNearest() {
 }  
   
 // =============================================  
-// 10. HELPERS  
+// 11. HELPERS  
 // =============================================  
 function calculateDistance(lat1, lon1, lat2, lon2) {  
     const R = 6371;  
@@ -1000,16 +1076,6 @@ function updateCurrencySymbol() {
 document.getElementById('newPrice').addEventListener('input', updateCurrencySymbol);  
 document.getElementById('newCurrency').addEventListener('change', updateCurrencySymbol);  
   
-function previewImage(event) {  
-    const reader = new FileReader();  
-    reader.onload = function(e) {  
-        const preview = document.getElementById('imagePreview');  
-        preview.src = e.target.result;  
-        preview.style.display = 'block';  
-    };  
-    reader.readAsDataURL(event.target.files[0]);  
-}  
-  
 function editLand(id) {  
     const item = landDatabase.find(d => d.id === id);  
     if (!item) return;  
@@ -1025,9 +1091,32 @@ function editLand(id) {
     document.getElementById('newLat').value = item.lat;  
     document.getElementById('newLng').value = item.lng;  
     document.getElementById('newDate').value = item.date;  
-    if (item.image) {  
-        document.getElementById('imagePreview').src = item.image;  
-        document.getElementById('imagePreview').style.display = 'block';  
+    if (item.images && item.images.length > 0) {  
+        const container = document.getElementById('imagePreviewContainer');  
+        container.innerHTML = '';  
+        uploadedImages = [...item.images];  
+        item.images.forEach(img => {  
+            const wrapper = document.createElement('div');  
+            wrapper.className = 'image-wrapper';  
+            const imgEl = document.createElement('img');  
+            imgEl.src = img;  
+            imgEl.className = 'image-preview';  
+            imgEl.onclick = function() { showImageFull(img); };  
+            const deleteBtn = document.createElement('button');  
+            deleteBtn.className = 'delete-btn';  
+            deleteBtn.innerHTML = '✕';  
+            deleteBtn.onclick = function(e) {  
+                e.stopPropagation();  
+                const idx = uploadedImages.indexOf(img);  
+                if (idx > -1) {  
+                    uploadedImages.splice(idx, 1);  
+                    container.removeChild(wrapper);  
+                }  
+            };  
+            wrapper.appendChild(imgEl);  
+            wrapper.appendChild(deleteBtn);  
+            container.appendChild(wrapper);  
+        });  
     }  
     document.querySelector('#landForm button[type="submit"]').innerHTML = '<i class="fas fa-edit"></i> ອັບເດດ';  
     map.setView([item.lat, item.lng], 15);  
@@ -1038,13 +1127,15 @@ function editLand(id) {
 function resetForm() {  
     document.getElementById('landForm').reset();  
     document.getElementById('newDate').valueAsDate = new Date();  
-    document.getElementById('imagePreview').style.display = 'none';  
+    document.getElementById('imagePreviewContainer').innerHTML = '';  
     document.getElementById('newLat').value = '';  
     document.getElementById('newLng').value = '';  
     document.getElementById('convertedPriceDisplay').textContent = '-';  
+    uploadedImages = [];  
     if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }  
     editingId = null;  
     document.querySelector('#landForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> ບັນທຶກ';  
+    document.getElementById('newCurrency').value = 'USD';  
 }  
   
 function updatePendingSync() {  
@@ -1072,9 +1163,23 @@ function showDetail(id) {
     const inUSD = formatCurrency(convertCurrency(item.price, item.currency, 'USD'), 'USD');  
     const inTHB = formatCurrency(convertCurrency(item.price, item.currency, 'THB'), 'THB');  
     const inKIP = formatCurrency(convertCurrency(item.price, item.currency, 'KIP'), 'KIP');  
+      
+    let imagesHtml = '';  
+    if (item.images && item.images.length > 0) {  
+        imagesHtml = `  
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;justify-content:center;">  
+                ${item.images.map(img => `  
+                    <img src="${img}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid #e9ecef;"   
+                         onclick="showImageFull('${img}')">  
+                `).join('')}  
+            </div>  
+            <p style="font-size:12px;color:#999;text-align:center;">${item.images.length} ຮູບ (ຄລິກຮູບເພື່ອເບິ່ງໃຫຍ່)</p>  
+        `;  
+    }  
+      
     modalBody.innerHTML = `  
         <h3>${item.title} <span class="badge badge-sync">${item.synced ? '✅ Synced' : '🔄 Pending'}</span></h3>  
-        ${item.image ? `<img src="${item.image}" style="max-width:100%;max-height:200px;border-radius:12px;margin:10px 0;">` : ''}  
+        ${imagesHtml}  
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px;">  
             <div><strong>💰 ລາຄາ:</strong> ${formatCurrency(item.price, item.currency)}</div>  
             <div><strong>💱 ປະມານ:</strong> ${inUSD} | ${inTHB} | ${inKIP}</div>  
@@ -1084,6 +1189,7 @@ function showDetail(id) {
             <div><strong>📍 ທີ່ຢູ່:</strong> ${item.address}</div>  
             <div><strong>📞 ເບີໂທ:</strong> ${item.phone}</div>  
             <div><strong>📅 ວັນທີ:</strong> ${item.date}</div>  
+            <div style="grid-column:span 2;"><strong>🌐 ພິກັດ:</strong> ${item.lat}, ${item.lng}</div>  
         </div>  
         <div class="btn-group" style="margin-top:12px;">  
             <button class="btn btn-primary btn-sm" onclick="closeModal();map.setView([${item.lat}, ${item.lng}], 16);"><i class="fas fa-map"></i> ເບິ່ງໃນແຜນທີ່</button>  
@@ -1099,20 +1205,17 @@ async function syncSingleItem(id) {
     const item = landDatabase.find(d => d.id === id);  
     if (!item || !isSupabaseConnected) { showToast('ບໍ່ສາມາດ Sync ໄດ້!', 'error'); return; }  
     try {  
+        const data = {  
+            title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
+            area: item.area, width: item.width, address: item.address, deed: item.deed,  
+            lat: item.lat, lng: item.lng, date: item.date, images: item.images || []  
+        };  
         const { data: existing } = await supabase.from(TABLE_NAME).select('id').eq('id', id).single();  
         let result;  
         if (existing) {  
-            result = await supabase.from(TABLE_NAME).update({  
-                title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-                area: item.area, width: item.width, address: item.address, deed: item.deed,  
-                lat: item.lat, lng: item.lng, date: item.date, image: item.image  
-            }).eq('id', id);  
+            result = await supabase.from(TABLE_NAME).update(data).eq('id', id);  
         } else {  
-            result = await supabase.from(TABLE_NAME).insert([{  
-                id: item.id, title: item.title, phone: item.phone, price: item.price, currency: item.currency,  
-                area: item.area, width: item.width, address: item.address, deed: item.deed,  
-                lat: item.lat, lng: item.lng, date: item.date, image: item.image  
-            }]);  
+            result = await supabase.from(TABLE_NAME).insert([{ id: item.id, ...data }]);  
         }  
         if (!result.error) {  
             item.synced = true;  
@@ -1140,9 +1243,9 @@ function resetMapView() { map.setView([17.9757, 102.6331], 13); }
   
 function exportCSV() {  
     if (landDatabase.length === 0) { showToast('ບໍ່ມີຂໍ້ມູນ!', 'warning'); return; }  
-    let csv = 'ID,ຊື່,ລາຄາ,ສະກຸນ,USD,THB,KIP,ເນື້ອທີ່,ໜ້າກວ້າງ,ທີ່ຢູ່,ໃບຕາດິນ,ເບີໂທ,ວັນທີ,Lat,Lng\n';  
+    let csv = 'ID,ຊື່,ລາຄາ,ສະກຸນ,USD,THB,KIP,ເນື້ອທີ່,ໜ້າກວ້າງ,ທີ່ຢູ່,ໃບຕາດິນ,ເບີໂທ,ວັນທີ,Lat,Lng,ຈຳນວນຮູບ\n';  
     landDatabase.forEach(item => {  
-        csv += `${item.id},"${item.title}",${item.price},"${item.currency}",${convertCurrency(item.price, item.currency, 'USD').toFixed(2)},${convertCurrency(item.price, item.currency, 'THB').toFixed(2)},${convertCurrency(item.price, item.currency, 'KIP').toFixed(0)},"${item.area}","${item.width}","${item.address}","${item.deed}","${item.phone}","${item.date}",${item.lat},${item.lng}\n`;  
+        csv += `${item.id},"${item.title}",${item.price},"${item.currency}",${convertCurrency(item.price, item.currency, 'USD').toFixed(2)},${convertCurrency(item.price, item.currency, 'THB').toFixed(2)},${convertCurrency(item.price, item.currency, 'KIP').toFixed(0)},"${item.area}","${item.width}","${item.address}","${item.deed}","${item.phone}","${item.date}",${item.lat},${item.lng},${item.images ? item.images.length : 0}\n`;  
     });  
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });  
     const a = document.createElement('a');  
@@ -1166,7 +1269,7 @@ function showToast(message, type = 'success') {
 }  
   
 // =============================================  
-// 11. MAP  
+// 12. MAP  
 // =============================================  
 const map = L.map('map', {   
     zoomControl: true,  
@@ -1184,6 +1287,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let markersLayer = L.layerGroup().addTo(map);  
 let tempMarker = null;  
   
+// ຄລິກແຜນທີ່ເພື່ອເລືອກພິກັດ (ຍັງສາມາດພີມເອງໄດ້)  
 map.on('click', function(e) {  
     const lat = e.latlng.lat.toFixed(6);  
     const lng = e.latlng.lng.toFixed(6);  
@@ -1192,11 +1296,11 @@ map.on('click', function(e) {
     if (tempMarker) map.removeLayer(tempMarker);  
     tempMarker = L.marker([lat, lng], { draggable: true }).addTo(map)  
         .bindPopup("📍 ຈຸດທີ່ເລືອກ").openPopup();  
-    showToast('ເລືອກພິກັດແລ້ວ!', 'info');  
+    showToast('ເລືອກພິກັດແລ້ວ! (ສາມາດພີມແກ້ໄຂໄດ້)', 'info');  
 });  
   
 // =============================================  
-// 12. INIT  
+// 13. INIT  
 // =============================================  
 document.getElementById('newDate').valueAsDate = new Date();  
 document.getElementById('rateUSDToKIP').textContent = CURRENCY_RATES.KIP.toLocaleString();  
@@ -1211,9 +1315,10 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.key === 's') { e.preventDefault(); syncToSupabase(); }  
 });  
   
-console.log('🏠 ລະບົບພ້ອມໃຊ້ງານແລ້ວ! (ຮັບກັບມືຖື)');  
+console.log('🏠 ລະບົບພ້ອມໃຊ້ງານແລ້ວ!');  
+console.log('📍 ພິກັດ: ພີມໄດ້ ຫຼື ຄລິກແຜນທີ່');  
+console.log('📸 ອັບໂຫຼດຮູບໄດ້ສູງສຸດ 5 ຮູບ');  
 console.log('📊 ມີຂໍ້ມູນ', landDatabase.length, 'ລາຍການ');  
-console.log('💡 ຄລິກແຜນທີ່ເພື່ອເລືອກພິກັດ | Ctrl+S = Sync');  
 </script>  
 </body>  
 </html>  
